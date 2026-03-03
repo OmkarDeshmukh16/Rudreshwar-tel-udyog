@@ -11,7 +11,7 @@ $(document).ready(function() {
                     <small class="text-muted">${rev.date}</small>
                 </div>`;
             });
-            $('#review-display').html(html || '<p>No reviews yet. Be the first!</p>');
+            $('#review-display').html('<p>No reviews yet. Be the first!</p>');
         });
     }
     loadReviews();
@@ -28,9 +28,12 @@ $(document).ready(function() {
             message: $('#rev_message').val()
         }, function(response) {
             $('#review-form')[0].reset();
+            // show both inline status and an alert popup
             $('#review-status').text('Review posted successfully!').css('color', 'green');
+            alert('Review posted successfully');
             btn.text('Post Review');
             loadReviews(); // Refresh display
         });
     });
 });
+

@@ -29,3 +29,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo file_exists('reviews.json') ? file_get_contents('reviews.json') : json_encode([]);
 }
 ?>
+
