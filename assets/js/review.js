@@ -1,7 +1,26 @@
 $(document).ready(function() {
     // 1. Load reviews on page start
     function loadReviews() {
-        $.getJSON('assets/save_review.php', function(data) {
+        // request text so we can detect when PHP isn't being executed
+        $.ajax({
+            url: 'assets/save_review.php',
+            method: 'GET',
+            dataType: 'text'
+        }).done(function(responseText) {
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (e) {
+                console.error('Could not parse JSON from reviews endpoint:', e, responseText);
+                // if the response starts with <?php then the file isn't being processed by PHP
+                if (responseText.trim().startsWith('<?php')) {
+                    $('#review-display').html('<p class="text-danger">Server is returning PHP source instead of JSON. Make sure you are running this page through a PHP-capable web server.</p>');
+                } else {
+                    $('#review-display').html('<p class="text-danger">Error loading reviews (invalid JSON).</p>');
+                }
+                return;
+            }
+
             let html = '';
             if (Array.isArray(data) && data.length) {
                 data.forEach(rev => {
