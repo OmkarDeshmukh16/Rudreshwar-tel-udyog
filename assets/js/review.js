@@ -48,17 +48,44 @@ $(document).ready(function() {
         const btn = $(this).find('button');
         btn.text('Posting...');
 
+        // try POST first
         $.post('assets/save_review.php', {
             name: $('#rev_name').val(),
             rating: $('#rev_rating').val(),
             message: $('#rev_message').val()
-        }, function(response) {
+        }).done(function(response) {
             $('#review-form')[0].reset();
-            // show both inline status and an alert popup
             $('#review-status').text('Review posted successfully!').css('color', 'green');
             alert('Review posted successfully');
             btn.text('Post Review');
-            loadReviews(); // Refresh display
+            loadReviews();
+        }).fail(function(jqxhr, textStatus, error) {
+            console.error('POST failed', textStatus, error);
+            // if the server rejects POST (405) try GET fallback
+            if (jqxhr.status === 405) {
+                const params = {
+                    name: $('#rev_name').val(),
+                    rating: $('#rev_rating').val(),
+                    message: $('#rev_message').val()
+                };
+                $.get('assets/save_review.php', params)
+                    .done(function() {
+                        $('#review-form')[0].reset();
+                        $('#review-status').text('Review posted successfully! (via GET)')
+                            .css('color', 'green');
+                        alert('Review posted successfully');
+                        btn.text('Post Review');
+                        loadReviews();
+                    })
+                    .fail(function(jqxhr2, ts2, err2) {
+                        console.error('GET fallback also failed', ts2, err2);
+                        $('#review-status').text('Could not post review.').css('color', 'red');
+                        btn.text('Post Review');
+                    });
+            } else {
+                $('#review-status').text('Could not post review.').css('color', 'red');
+                btn.text('Post Review');
+            }
         });
     });
 });

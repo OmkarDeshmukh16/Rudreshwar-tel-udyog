@@ -1,15 +1,22 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// support POST and GET so platforms that block POST can still write
+$method = $_SERVER['REQUEST_METHOD'];
+if ($method === 'POST' || ($method === 'GET' && isset($_GET['name']))) {
     $file = 'reviews.json';
     
     // Get existing reviews
     $current_data = file_exists($file) ? json_decode(file_get_contents($file), true) : [];
 
+    // pick data from POST first, falling back to GET
+    $name = $method === 'POST' ? $_POST['name'] : $_GET['name'];
+    $rating = $method === 'POST' ? $_POST['rating'] : $_GET['rating'];
+    $message = $method === 'POST' ? $_POST['message'] : $_GET['message'];
+
     // Create new review object
     $new_review = [
-        'name' => htmlspecialchars($_POST['name']),
-        'rating' => $_POST['rating'],
-        'message' => htmlspecialchars($_POST['message']),
+        'name' => htmlspecialchars($name),
+        'rating' => $rating,
+        'message' => htmlspecialchars($message),
         'date' => date('d M, Y')
     ];
 
