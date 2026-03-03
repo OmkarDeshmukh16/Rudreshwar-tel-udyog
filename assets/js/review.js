@@ -3,15 +3,22 @@ $(document).ready(function() {
     function loadReviews() {
         $.getJSON('assets/save_review.php', function(data) {
             let html = '';
-            data.forEach(rev => {
-                html += `
+            if (Array.isArray(data) && data.length) {
+                data.forEach(rev => {
+                    html += `
                 <div class="single_review_item mb-20">
                     <h6>${rev.name} <span class="text-warning">${"★".repeat(rev.rating)}</span></h6>
                     <p>"${rev.message}"</p>
                     <small class="text-muted">${rev.date}</small>
                 </div>`;
-            });
-            $('#review-display').html('<p>No reviews yet. Be the first!</p>');
+                });
+                $('#review-display').html(html);
+            } else {
+                $('#review-display').html('<p>No reviews yet. Be the first!</p>');
+            }
+        }).fail(function(jqxhr, textStatus, error) {
+            console.error('Failed to load reviews:', textStatus, error);
+            $('#review-display').html('<p class="text-danger">Unable to load reviews.</p>');
         });
     }
     loadReviews();
