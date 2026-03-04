@@ -622,51 +622,40 @@
 
     <!--====== Review PART START ======-->
 
-    <section id="reviews" class="review_area pt-120 pb-120 bg_light">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-6">
-                    <div class="section_title text-center pb-30">
-                        <h4 class="title">Customer Reviews</h4>
-                        <span class="line"><span class="box"></span></span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-5">
-                    <div class="contact_form mt-30 wow fadeInLeft" data-wow-delay="0.3s">
-                        <form id="review-form">
-                            <div class="single_form">
-                                <input type="text" id="rev_name" name="name" placeholder="Your Name" required>
-                            </div>
-                            <div class="single_form mt-20">
-                                <select id="rev_rating" class="form-control"
-                                    style="height: 50px; border-radius: 10px; border: 2px solid #f1f1f1;">
-                                    <option value="5">⭐⭐⭐⭐⭐ (5 Stars)</option>
-                                    <option value="4">⭐⭐⭐⭐ (4 Stars)</option>
-                                    <option value="3">⭐⭐⭐ (3 Stars)</option>
-                                </select>
-                            </div>
-                            <div class="single_form mt-20">
-                                <textarea id="rev_message" name="message" placeholder="Write your review here..."
-                                    required></textarea>
-                            </div>
-                            <p id="review-status"></p>
-                            <div class="single_form mt-30">
-                                <button type="submit" class="main-btn">Post Review</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="col-lg-7">
-                    <div id="review-display" class="review_list mt-30 wow fadeInRight" data-wow-delay="0.5s">
-                        <div class="text-center">Loading reviews...</div>
-                    </div>
+    <section id="reviews" class="review_area pt-120 pb-120 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center pb-50">
+                    <h4 class="title">Reviews</h4>
+                    <span class="line"><span class="box"></span></span>
                 </div>
             </div>
         </div>
-    </section>
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="review_form_card p-4 shadow-lg rounded bg-white">
+                    <h5 class="mb-3">Share Your Experience</h5>
+                    <form id="global-review-form">
+                        <input type="text" id="rev_name" placeholder="Full Name" class="form-control mb-3" required>
+                        <select id="rev_rating" class="form-control mb-3">
+                            <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
+                            <option value="4">⭐⭐⭐⭐ (Good)</option>
+                            <option value="3">⭐⭐⭐ (Average)</option>
+                        </select>
+                        <textarea id="rev_msg" placeholder="Your review..." class="form-control mb-3" rows="4" required></textarea>
+                        <button type="submit" class="main-btn w-100">Post Review</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div id="global-review-display" class="review_feed_container">
+                    <p class="text-center">Loading reviews...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
     <!--====== Review PART START ======-->
 
@@ -811,6 +800,10 @@
 
     <!--====== Main js ======-->
     <script src="assets/js/main.js"></script>
+
+    <!--====== Firebase ======-->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 </body>
 
