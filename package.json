@@ -1,0 +1,12 @@
+{
+  "name": "rudreshwar-tel-udyog",
+  "version": "1.0.0",
+  "description": "Static site for Rudreshwar Tel Udyog with a simple review backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
