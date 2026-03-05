@@ -2,6 +2,23 @@ $(function () {
 
     "use strict";
 
+    const firebaseConfig = {
+        apiKey: "AIzaSyBSwXElhSrLEt_MrkmWnxb3ybT1efTSOK8",
+        authDomain: "rudreshwarreviews.firebaseapp.com",
+        databaseURL: "https://rudreshwarreviews-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "rudreshwarreviews",
+        // storageBucket: "rudreshwarreviews.firebasestorage.app",
+        // messagingSenderId: "895028012493",
+        // appId: "1:895028012493:web:7dc0a0da91cf431e4a9084",
+        // measurementId: "G-WJS95PXBBR"
+    };
+
+    // Initialize Firebase only if it hasn't been initialized
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const database = firebase.database();
+
     //===== Prealoder
 
     $(window).on('load', function (event) {
@@ -53,7 +70,6 @@ $(function () {
         $(".navbar-toggler").removeClass('active');
     });
 
-
     //===== Slick Slider
 
     function mainSlider() {
@@ -100,8 +116,6 @@ $(function () {
     }
     mainSlider();
 
-
-
     //=====  Slick Customer
 
     $('.customer_active').slick({
@@ -141,10 +155,7 @@ $(function () {
         ]
     });
 
-
     //=====  Slick Customer
-
-
 
     //=====  WOW active
 
@@ -197,56 +208,36 @@ $(function () {
         ]
     });
 
-    // Import Firebase (Add these script tags to your index.html head first)
-    // <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    // <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    // Handle Form Submission
+    $('#global-review-form').on('submit', function (e) {
+        e.preventDefault();
+        console.log("Submit clicked!");
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBSwXElhSrLEt_MrkmWnxb3ybT1efTSOK8",
-        authDomain: "rudreshwarreviews.firebaseapp.com",
-        databaseURL: "https://rudreshwarreviews-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "rudreshwarreviews",
-        // storageBucket: "rudreshwarreviews.firebasestorage.app",
-        // messagingSenderId: "895028012493",
-        // appId: "1:895028012493:web:7dc0a0da91cf431e4a9084",
-        // measurementId: "G-WJS95PXBBR"
-    };
-// Initialize Firebase only if it hasn't been initialized
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-const database = firebase.database();
+        const reviewData = {
+            name: $('#rev_name').val(),
+            rating: $('#rev_rating').val(),
+            message: $('#rev_msg').val(),
+            date: new Date().toLocaleDateString(),
+            timestamp: Date.now()
+        };
 
-// Handle Form Submission
-$('#global-review-form').on('submit', function(e) {
-    e.preventDefault();
-    console.log("Submit clicked!");
-
-    const reviewData = {
-        name: $('#rev_name').val(),
-        rating: $('#rev_rating').val(),
-        message: $('#rev_msg').val(),
-        date: new Date().toLocaleDateString(),
-        timestamp: Date.now()
-    };
-    
-    database.ref('reviews').push(reviewData)
-        .then(() => {
-            alert("Review saved successfully!");
+        database.ref('reviews').push(reviewData)
+            .then(() => {
+                alert("Review saved successfully!");
                 $('#global-review-form')[0].reset();
-        })
-        .catch((error) => {
-            console.error("Firebase Error:", error);
-            alert("Failed to post review. Check console.");
-        });
-});
+            })
+            .catch((error) => {
+                console.error("Firebase Error:", error);
+                alert("Failed to post review. Check console.");
+            });
+    });
 
-// Live Sync (Everyone sees this)
-database.ref('reviews').orderByChild('timestamp').limitToLast(20).on('value', (snapshot) => {
-    let html = '';
-    snapshot.forEach((child) => {
-        const rev = child.val();
-        html = `
+    // Live Sync (Everyone sees this)
+    database.ref('reviews').orderByChild('timestamp').limitToLast(20).on('value', (snapshot) => {
+        let html = '';
+        snapshot.forEach((child) => {
+            const rev = child.val();
+            html = `
             <div class="global_review_card mb-3 p-3 shadow-sm border-left-gold wow fadeInUp">
                 <div class="d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">${rev.name}</h6>
@@ -256,8 +247,8 @@ database.ref('reviews').orderByChild('timestamp').limitToLast(20).on('value', (s
                 <small class="text-muted" style="font-size: 10px;">${rev.date}</small>
             </div>
         ` + html;
+        });
+        $('#global-review-display').html(html || '<p class="text-center">No reviews yet. Be the first!</p>');
     });
-    $('#global-review-display').html(html || '<p class="text-center">No reviews yet. Be the first!</p>');
-});
 
 });
