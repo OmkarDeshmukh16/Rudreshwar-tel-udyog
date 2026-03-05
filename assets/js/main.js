@@ -197,30 +197,6 @@ $(function () {
         ]
     });
 
-    /* gallery_active was originally initialized as a slick carousel, but the layout
-       has been changed to a static 3‑column grid with 3D hover cards.  The slider code
-       is therefore disabled to preserve the new layout. */
-    // $('.gallery_active').slick({
-    //     centerMode: true,
-    //     centerPadding: '20%', // This shows the side photos tilted
-    //     slidesToShow: 1,      // Focus on one at a time
-    //     autoplay: true,
-    //     autoplaySpeed: 3000,
-    //     speed: 1000,
-    //     infinite: true,
-    //     arrows: false,
-    //     dots: true,
-    //     responsive: [
-    //         {
-    //             breakpoint: 768,
-    //             settings: {
-    //                 centerPadding: '40px',
-    //                 slidesToShow: 1
-    //             }
-    //         }
-    //     ]
-    // });    
-
     // Import Firebase (Add these script tags to your index.html head first)
     // <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     // <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -244,7 +220,8 @@ const database = firebase.database();
 // Handle Form Submission
 $('#global-review-form').on('submit', function(e) {
     e.preventDefault();
-    
+    console.log("Submit clicked!");
+
     const reviewData = {
         name: $('#rev_name').val(),
         rating: $('#rev_rating').val(),
@@ -255,8 +232,8 @@ $('#global-review-form').on('submit', function(e) {
     
     database.ref('reviews').push(reviewData)
         .then(() => {
-            $(this)[0].reset();
-            alert("Success! Your review is now live globally.");
+            alert("Review saved successfully!");
+                $('#global-review-form')[0].reset();
         })
         .catch((error) => {
             console.error("Firebase Error:", error);
