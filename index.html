@@ -33,6 +33,8 @@
     <!--====== AOS CSS ======-->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 
 <body>
@@ -650,8 +652,11 @@
                     </div>
                 </div>
                 <div class="col-lg-7">
-                    <div id="global-review-display" class="review_feed_container">
-                        <p class="text-center">Loading reviews...</p>
+                    <div class="swiper reviewSwiper">
+                        <div class="swiper-wrapper" id="global-review-display">
+                        </div>
+
+                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
             </div>
@@ -802,6 +807,81 @@
 
     <!--====== Main js ======-->
     <script src="assets/js/main.js"></script>
+
+    <script>
+
+        const form = document.getElementById("global-review-form");
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById("rev_name").value;
+            const rating = document.getElementById("rev_rating").value;
+            const message = document.getElementById("rev_msg").value;
+
+            await fetch("/api/add-review", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name,
+                    rating,
+                    message
+                })
+            });
+
+            form.reset();
+            loadReviews();
+        });
+
+        async function loadReviews() {
+
+            const res = await fetch("/api/reviews");
+            const reviews = await res.json();
+
+            const container = document.getElementById("global-review-display");
+
+            container.innerHTML = "";
+
+            reviews.forEach(r => {
+
+                container.innerHTML += `
+            <div class="swiper-slide">
+                <div class="review_card">
+                    <div class="review_name">${r.name}</div>
+                    <div class="review_rating">${"⭐".repeat(r.rating)}</div>
+                    <p>${r.message}</p>
+                </div>
+            </div>
+        `;
+            });
+
+            new Swiper(".reviewSwiper", {
+                slidesPerView: 2,
+                spaceBetween: 30,
+                autoplay: {
+                    delay: 3000
+                },
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true
+                },
+                breakpoints: {
+                    320: {
+                        slidesPerView: 1
+                    },
+                    768: {
+                        slidesPerView: 2
+                    }
+                }
+            });
+
+        }
+
+        loadReviews();
+
+    </script>
 
 </body>
 

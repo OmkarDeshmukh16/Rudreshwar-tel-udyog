@@ -2,23 +2,6 @@ $(function () {
 
     "use strict";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBSwXElhSrLEt_MrkmWnxb3ybT1efTSOK8",
-        authDomain: "rudreshwarreviews.firebaseapp.com",
-        databaseURL: "https://rudreshwarreviews-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "rudreshwarreviews",
-        // storageBucket: "rudreshwarreviews.firebasestorage.app",
-        // messagingSenderId: "895028012493",
-        // appId: "1:895028012493:web:7dc0a0da91cf431e4a9084",
-        // measurementId: "G-WJS95PXBBR"
-    };
-
-    // Initialize Firebase only if it hasn't been initialized
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
-    const database = firebase.database();
-
     //===== Prealoder
 
     $(window).on('load', function (event) {
@@ -208,47 +191,6 @@ $(function () {
         ]
     });
 
-    // Handle Form Submission
-    $('#global-review-form').on('submit', function (e) {
-        e.preventDefault();
-        console.log("Submit clicked!");
-
-        const reviewData = {
-            name: $('#rev_name').val(),
-            rating: $('#rev_rating').val(),
-            message: $('#rev_msg').val(),
-            date: new Date().toLocaleDateString(),
-            timestamp: Date.now()
-        };
-
-        database.ref('reviews').push(reviewData)
-            .then(() => {
-                alert("Review saved successfully!");
-                $('#global-review-form')[0].reset();
-            })
-            .catch((error) => {
-                console.error("Firebase Error:", error);
-                alert("Failed to post review. Check console.");
-            });
-    });
-
-    // Live Sync (Everyone sees this)
-    database.ref('reviews').orderByChild('timestamp').limitToLast(20).on('value', (snapshot) => {
-        let html = '';
-        snapshot.forEach((child) => {
-            const rev = child.val();
-            html = `
-            <div class="global_review_card mb-3 p-3 shadow-sm border-left-gold wow fadeInUp">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0">${rev.name}</h6>
-                    <span class="text-warning">${"★".repeat(rev.rating)}</span>
-                </div>
-                <p class="mt-2 text-dark" style="font-size: 14px;">"${rev.message}"</p>
-                <small class="text-muted" style="font-size: 10px;">${rev.date}</small>
-            </div>
-        ` + html;
-        });
-        $('#global-review-display').html(html || '<p class="text-center">No reviews yet. Be the first!</p>');
-    });
+    
 
 });

@@ -1987,3 +1987,24 @@ p.form-message.error.form-message.error {
 .main-btn:hover {
     background-color: #e5ae06;
 }
+
+.review_card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+
+.review_card:hover{
+    transform:translateY(-5px);
+}
+
+.review_name{
+    font-weight:600;
+}
+
+.review_rating{
+    color:#ffb400;
+    font-size:18px;
+}
