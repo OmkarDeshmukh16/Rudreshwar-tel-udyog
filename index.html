@@ -819,7 +819,7 @@
             const rating = document.getElementById("rev_rating").value;
             const message = document.getElementById("rev_msg").value;
 
-            await fetch("/api/add-review", {
+            await fetch("/api/review", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -837,7 +837,9 @@
 
         async function loadReviews() {
 
-            const res = await fetch("/api/reviews");
+            const res = await fetch("/api/reviews", {
+                method: "POST"
+            });
             const reviews = await res.json();
 
             const container = document.getElementById("global-review-display");
