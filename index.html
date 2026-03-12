@@ -810,26 +810,54 @@
 
     <script>
 
-        const form = document.getElementById("global-review-form");
+        document.getElementById("global-review-form").addEventListener("submit", async function (e) {
 
-        form.addEventListener("submit", async function (e) {
             e.preventDefault();
 
             const name = document.getElementById("rev_name").value;
-            const rating = document.getElementById("rev_rating").value;
+            const rating = parseInt(document.getElementById("rev_rating").value);
             const message = document.getElementById("rev_msg").value;
 
-            await fetch("/api/reviews", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    name,
-                    rating,
-                    message
-                })
-            });
+            try {
+
+                const res = await fetch("/api/reviews", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name,
+                        rating,
+                        message
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.success) {
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Thank You!",
+                        text: "Your review has been posted successfully.",
+                        confirmButtonColor: "#28a745"
+                    });
+
+                    document.getElementById("global-review-form").reset();
+
+                    loadReviews(); // refresh reviews
+
+                }
+
+            } catch (error) {
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong while posting review."
+                });
+
+            }
 
             form.reset();
             loadReviews();
@@ -884,6 +912,8 @@
         loadReviews();
 
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 
