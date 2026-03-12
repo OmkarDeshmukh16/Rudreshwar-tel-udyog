@@ -859,24 +859,23 @@
 
             }
 
-            form.reset();
             loadReviews();
         });
 
         async function loadReviews() {
 
-            const res = await fetch("/api/reviews", {
-                method: "POST"
-            });
-            const reviews = await res.json();
+            try {
 
-            const container = document.getElementById("global-review-display");
+                const res = await fetch("/api/reviews");
+                const reviews = await res.json();
 
-            container.innerHTML = "";
+                const container = document.getElementById("global-review-display");
 
-            reviews.forEach(r => {
+                container.innerHTML = "";
 
-                container.innerHTML += `
+                reviews.forEach(r => {
+
+                    container.innerHTML += `
             <div class="swiper-slide">
                 <div class="review_card">
                     <div class="review_name">${r.name}</div>
@@ -884,32 +883,31 @@
                     <p>${r.message}</p>
                 </div>
             </div>
-        `;
-            });
+            `;
 
-            new Swiper(".reviewSwiper", {
-                slidesPerView: 2,
-                spaceBetween: 30,
-                autoplay: {
-                    delay: 3000
-                },
-                pagination: {
-                    el: ".swiper-pagination",
-                    clickable: true
-                },
-                breakpoints: {
-                    320: {
-                        slidesPerView: 1
+                });
+
+                new Swiper(".reviewSwiper", {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                    autoplay: { delay: 3000 },
+                    pagination: {
+                        el: ".swiper-pagination",
+                        clickable: true
                     },
-                    768: {
-                        slidesPerView: 2
+                    breakpoints: {
+                        320: { slidesPerView: 1 },
+                        768: { slidesPerView: 2 }
                     }
-                }
-            });
+                });
+
+            } catch (error) {
+                console.error("Error loading reviews:", error);
+            }
 
         }
 
-        loadReviews();
+        document.addEventListener("DOMContentLoaded", loadReviews);
 
     </script>
 

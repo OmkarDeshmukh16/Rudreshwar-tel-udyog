@@ -1,0 +1,3 @@
+k8xIqRQ5INB1aA4U
+xaviercreations935_db_user
+mongodb+srv://xaviercreations935_db_user:k8xIqRQ5INB1aA4U@cluster0.sbg4dpz.mongodb.net/
