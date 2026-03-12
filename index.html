@@ -819,7 +819,7 @@
             const rating = document.getElementById("rev_rating").value;
             const message = document.getElementById("rev_msg").value;
 
-            await fetch("/api/review", {
+            await fetch("/api/reviews", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
